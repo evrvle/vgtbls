@@ -1,0 +1,933 @@
+/* Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Indie Flower', cursive;
+    color: #333;
+    line-height: 1.6;
+    overflow-x: hidden;
+    position: relative;
+    transition: background 0.5s ease;
+}
+
+/* Day Mode */
+body.day-mode {
+    background: #87CEEB; /* Sky blue background */
+}
+
+/* Night Mode */
+body.night-mode {
+    background: #0a1128; /* Dark blue night sky */
+    color: #f0f0f0;
+}
+
+/* Day: Sky and Ground */
+body.day-mode::before {
+    content: '';
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 40vh;
+    background: #7CCC7C; /* Grass green */
+    z-index: -1;
+    transition: background 0.5s ease;
+}
+
+/* Night: Sky and Ground */
+body.night-mode::before {
+    content: '';
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 40vh;
+    background: #17341B; /* Dark grass */
+    z-index: -1;
+}
+
+/* Day: Sun */
+body.day-mode::after {
+    content: '';
+    position: fixed;
+    top: 30px;
+    right: 50px;
+    width: 80px;
+    height: 80px;
+    background: #FFD700; /* Gold for the sun */
+    border-radius: 50%;
+    box-shadow: 0 0 30px 10px rgba(255, 215, 0, 0.5);
+    z-index: -1;
+    transition: all 0.5s ease;
+}
+
+/* Night: Moon */
+body.night-mode::after {
+    content: '';
+    position: fixed;
+    top: 30px;
+    right: 50px;
+    width: 60px;
+    height: 60px;
+    background: #E6E6FA; /* Lavender color for moon */
+    border-radius: 50%;
+    box-shadow: 0 0 30px 10px rgba(230, 230, 250, 0.3);
+    z-index: -1;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Controls */
+.controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding: 0.5rem 1rem;
+    border-radius: 15px;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Dark Mode Toggle */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 30px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #87CEEB;
+    transition: .4s;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 5px;
+}
+
+.night-mode .slider {
+    background-color: #0a1128;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 22px;
+    width: 22px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    z-index: 1;
+}
+
+input:checked + .slider:before {
+    transform: translateX(30px);
+}
+
+.slider.round {
+    border-radius: 30px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+.icon {
+    z-index: 0;
+    font-size: 16px;
+    line-height: 1;
+}
+
+.moon-icon {
+    margin-left: auto;
+}
+
+/* Language Selector */
+.language-selector {
+    display: flex;
+    gap: 5px;
+}
+
+.lang-btn {
+    background: rgba(255, 255, 255, 0.5);
+    border: none;
+    padding: 5px 10px;
+    border-radius: 15px;
+    cursor: pointer;
+    font-family: 'Indie Flower', cursive;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.lang-btn:hover {
+    background: rgba(255, 255, 255, 0.8);
+}
+
+.lang-btn.active {
+    background: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Night mode language buttons */
+body.night-mode .lang-btn {
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+}
+
+body.night-mode .lang-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+body.night-mode .lang-btn.active {
+    background: rgba(255, 255, 255, 0.5);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+/* Language specific content */
+.lang-en, .lang-es, .lang-ru {
+    display: none;
+}
+
+html[lang="en"] .lang-en {
+    display: block;
+}
+
+html[lang="es"] .lang-es {
+    display: block;
+}
+
+html[lang="ru"] .lang-ru {
+    display: block;
+}
+
+/* For spans inside links */
+a .lang-en, a .lang-es, a .lang-ru {
+    display: none;
+}
+
+html[lang="en"] a .lang-en {
+    display: inline;
+}
+
+html[lang="es"] a .lang-es {
+    display: inline;
+}
+
+html[lang="ru"] a .lang-ru {
+    display: inline;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding-top: 1rem;
+}
+
+h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 0px #fff;
+    animation: wobble 2s ease-in-out infinite;
+}
+
+/* Night mode heading shadow */
+body.night-mode h1 {
+    text-shadow: 2px 2px 0px #0a1128;
+}
+
+@keyframes wobble {
+    0%, 100% { transform: rotate(-2deg); }
+    50% { transform: rotate(2deg); }
+}
+
+header p {
+    font-size: 1.5rem;
+    text-shadow: 1px 1px 0px #fff;
+}
+
+/* Night mode paragraph shadow */
+body.night-mode header p {
+    text-shadow: 1px 1px 0px #0a1128;
+}
+
+.basket-container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem 0;
+}
+
+.basket {
+    background: #D2B48C; /* Tan color for basket */
+    border-radius: 50% 50% 10% 10% / 80% 80% 20% 20%;
+    padding: 2rem;
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+    position: relative;
+    transform-style: preserve-3d;
+    perspective: 1000px;
+    max-width: 100%;
+    transition: background 0.5s ease, box-shadow 0.5s ease;
+}
+
+/* Night mode basket */
+body.night-mode .basket {
+    background: #8B7355; /* Darker basket color */
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.4);
+}
+
+/* Basket handle */
+.basket::before {
+    content: '';
+    position: absolute;
+    top: -30px;
+    left: 20%;
+    right: 20%;
+    height: 60px;
+    border: 5px solid #A67C52;
+    border-bottom: none;
+    border-radius: 50% 50% 0 0;
+    z-index: -1;
+    transition: border-color 0.5s ease;
+}
+
+/* Night mode basket handle */
+body.night-mode .basket::before {
+    border-color: #6F4E37; /* Darker handle color */
+}
+
+.veg-links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;
+    padding: 1rem;
+}
+
+.veg-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: #333;
+    transition: transform 0.3s ease, color 0.5s ease;
+    position: relative;
+}
+
+/* Night mode link color */
+body.night-mode .veg-link {
+    color: #f0f0f0;
+}
+
+.veg-link:hover {
+    transform: scale(1.1) rotate(5deg);
+}
+
+.veg-image {
+    width: 100px;
+    height: 100px;
+    margin-bottom: 0.5rem;
+    transition: transform 0.3s ease, box-shadow 0.5s ease;
+    position: relative;
+}
+
+/* Tomato */
+.tomato .veg-image {
+    background: radial-gradient(circle at 30% 30%, #FF6347, #E02700);
+    border-radius: 50%;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Night mode tomato */
+body.night-mode .tomato .veg-image {
+    background: radial-gradient(circle at 30% 30%, #CC5039, #9F1D00);
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+.tomato .veg-image::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    margin-left: -5px;
+    width: 10px;
+    height: 15px;
+    background: #228B22; /* Dark green stem */
+    border-radius: 5px;
+    transition: background 0.5s ease;
+}
+
+/* Night mode tomato stem */
+body.night-mode .tomato .veg-image::before {
+    background: #155715; /* Darker green stem */
+}
+
+/* Bell Pepper */
+.pepper .veg-image {
+    background: #4CBB17; /* Kelly Green */
+    border-radius: 40% 40% 60% 60% / 60% 60% 40% 40%;
+    transform: rotate(-20deg);
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Night mode pepper */
+body.night-mode .pepper .veg-image {
+    background: #3A8C12; /* Darker green */
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+.pepper .veg-image::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: 45%;
+    width: 10px;
+    height: 12px;
+    background: #006400; /* Dark Green stem */
+    border-radius: 5px;
+    transition: background 0.5s ease;
+}
+
+/* Night mode pepper stem */
+body.night-mode .pepper .veg-image::before {
+    background: #004B00; /* Darker stem */
+}
+
+/* Cucumber */
+.cucumber .veg-image {
+    background: linear-gradient(#2E8B57, #3CB371);
+    border-radius: 30px;
+    height: 90px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Night mode cucumber */
+body.night-mode .cucumber .veg-image {
+    background: linear-gradient(#1D5C3A, #2A7A4E);
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+/* Carrot */
+.carrot .veg-image {
+    background: #FF7F50; /* Coral */
+    width: 60px;
+    height: 120px;
+    clip-path: polygon(50% 0%, 90% 30%, 100% 100%, 0% 100%, 10% 30%);
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Night mode carrot */
+body.night-mode .carrot .veg-image {
+    background: #CC6541; /* Darker orange */
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+.carrot .veg-image::before {
+    content: '';
+    position: absolute;
+    top: -15px;
+    left: 20%;
+    width: 60%;
+    height: 20px;
+    background: #228B22; /* Green top */
+    clip-path: polygon(25% 0%, 75% 0%, 100% 100%, 0% 100%);
+    transition: background 0.5s ease;
+}
+
+/* Night mode carrot leaves */
+body.night-mode .carrot .veg-image::before {
+    background: #155715; /* Darker green top */
+}
+
+/* Broccoli */
+.broccoli .veg-image {
+    background: #006400; /* Dark Green */
+    width: 90px;
+    height: 80px;
+    border-radius: 50% 50% 20% 20% / 60% 60% 40% 40%;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Night mode broccoli */
+body.night-mode .broccoli .veg-image {
+    background: #004B00; /* Darker green */
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+.broccoli .veg-image::before {
+    content: '';
+    position: absolute;
+    bottom: -15px;
+    left: 40%;
+    width: 20px;
+    height: 20px;
+    background: #8B4513; /* Brown stem */
+    border-radius: 5px;
+    transition: background 0.5s ease;
+}
+
+/* Night mode broccoli stem */
+body.night-mode .broccoli .veg-image::before {
+    background: #592D0D; /* Darker brown stem */
+}
+
+.veg-link span {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-top: 0.5rem;
+    text-shadow: 1px 1px 0px #fff;
+    transition: text-shadow 0.5s ease;
+}
+
+/* Night mode veggie name */
+body.night-mode .veg-link span {
+    text-shadow: 1px 1px 0px #0a1128;
+}
+
+/* Coming soon indicator */
+.veg-link[aria-label*="Coming Soon"]::after {
+    content: 'Coming Soon';
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background: #FF6347;
+    color: white;
+    font-size: 0.8rem;
+    padding: 2px 6px;
+    border-radius: 10px;
+    transform: rotate(10deg);
+}
+
+/* Language-specific coming soon text */
+html[lang="es"] .veg-link[aria-label*="Coming Soon"]::after {
+    content: 'Próximamente';
+}
+
+html[lang="ru"] .veg-link[aria-label*="Coming Soon"]::after {
+    content: 'Скоро';
+}
+
+/* Night mode coming soon tag */
+body.night-mode .veg-link[aria-label*="Coming Soon"]::after {
+    background: #CC5039;
+}
+
+footer {
+    text-align: center;
+    margin-top: auto;
+    padding: 1rem;
+    font-size: 1.1rem;
+    text-shadow: 1px 1px 0px #fff;
+    transition: text-shadow 0.5s ease;
+}
+
+/* Night mode footer */
+body.night-mode footer {
+    text-shadow: 1px 1px 0px #0a1128;
+}
+
+/* Night mode specific elements */
+.night-elements {
+    display: none;
+}
+
+body.night-mode .night-elements {
+    display: block;
+}
+
+/* Owl with headphones */
+.owl {
+    position: fixed;
+    top: 120px;
+    left: 80px;
+    width: 80px;
+    height: 100px;
+    z-index: 10;
+}
+
+.owl-body {
+    width: 80px;
+    height: 80px;
+    background: #8B734B;
+    border-radius: 50%;
+    position: relative;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+}
+
+.owl-eyes {
+    position: absolute;
+    top: 20px;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+}
+
+.owl-eye {
+    width: 25px;
+    height: 25px;
+    background: #FFFFE0;
+    border-radius: 50%;
+    position: relative;
+}
+
+.owl-eye::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 12px;
+    height: 12px;
+    background: #000;
+    border-radius: 50%;
+    animation: blink 4s infinite;
+}
+
+@keyframes blink {
+    0%, 90%, 100% { transform: translate(-50%, -50%) scale(1); }
+    95% { transform: translate(-50%, -50%) scale(0.1, 0); }
+}
+
+.headphones {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90px;
+    height: 40px;
+    border: 4px solid #333;
+    border-bottom: none;
+    border-radius: 40px 40px 0 0;
+}
+
+.headphones::before, .headphones::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    width: 15px;
+    height: 20px;
+    background: #333;
+    border-radius: 5px;
+}
+
+.headphones::before {
+    left: 5px;
+}
+
+.headphones::after {
+    right: 5px;
+}
+
+/* Mosquito style */
+.mosquito {
+    position: fixed;
+    width: 15px;
+    height: 15px;
+    background: transparent;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 10;
+}
+
+.mosquito::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 8px;
+    height: 8px;
+    background: rgba(0, 0, 0, 0.6);
+    border-radius: 50%;
+}
+
+.mosquito::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 1px;
+    height: 10px;
+    background: rgba(0, 0, 0, 0.6);
+}
+
+.mosquito .wing {
+    position: absolute;
+    top: 3px;
+    width: 8px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    animation: wing-flutter 0.1s infinite alternate;
+}
+
+.mosquito .wing.left {
+    left: -3px;
+    transform: rotate(-20deg);
+}
+
+.mosquito .wing.right {
+    right: -3px;
+    transform: rotate(20deg);
+}
+
+@keyframes wing-flutter {
+    from { transform: rotate(-20deg) scaleY(1); }
+    to { transform: rotate(-20deg) scaleY(0.8); }
+}
+
+@keyframes wing-flutter-right {
+    from { transform: rotate(20deg) scaleY(1); }
+    to { transform: rotate(20deg) scaleY(0.8); }
+}
+
+/* Stars */
+.star {
+    position: fixed;
+    background: #fff;
+    border-radius: 50%;
+    opacity: 0.8;
+    animation: twinkle 2s infinite alternate;
+}
+
+@keyframes twinkle {
+    from { opacity: 0.4; }
+    to { opacity: 0.8; }
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .veg-links {
+        gap: 1.5rem;
+    }
+    
+    .veg-image {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .carrot .veg-image {
+        width: 50px;
+        height: 100px;
+    }
+    
+    h1 {
+        font-size: 2.5rem;
+    }
+    
+    header p {
+        font-size: 1.2rem;
+    }
+    
+    .controls {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .owl {
+        top: 160px;
+        left: 30px;
+        transform: scale(0.8);
+    }
+}
+
+@media (max-width: 480px) {
+    .veg-links {
+        gap: 1rem;
+    }
+    
+    .veg-image {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .carrot .veg-image {
+        width: 40px;
+        height: 80px;
+    }
+    
+    h1 {
+        font-size: 2rem;
+    }
+    
+    header p {
+        font-size: 1rem;
+    }
+    
+    .basket {
+        padding: 1rem;
+    }
+    
+    .owl {
+        top: 150px;
+        left: 20px;
+        transform: scale(0.7);
+    }
+}
+
+/* Russian language specific font */
+.lang-ru {
+    font-family: 'Neucha', cursive;
+    letter-spacing: 0.5px;
+}
+
+/* For spans inside links */
+a .lang-ru {
+    font-family: 'Neucha', cursive;
+    letter-spacing: 0.5px;
+}
+
+/* Special styling for Russian language elements */
+html[lang="ru"] h1,
+html[lang="ru"] p,
+html[lang="ru"] .lang-btn,
+html[lang="ru"] footer {
+    font-family: 'Neucha', cursive;
+}
+
+/* Slightly increase font size for Russian text as it tends to appear smaller */
+html[lang="ru"] .veg-link span {
+    font-size: 1.3rem;
+}
+
+html[lang="ru"] .veg-link[aria-label*="Coming Soon"]::after {
+    font-family: 'Neucha', cursive;
+    font-size: 0.9rem;
+}
+
+/* DJ Pepe Animation */
+.dj-pepe {
+    position: fixed;
+    z-index: 20;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 1s ease;
+    filter: drop-shadow(0 0 10px rgba(0, 255, 0, 0.3));
+    animation: pepe-float 60s infinite alternate ease-in-out;
+    display: none;
+}
+
+body.night-mode .dj-pepe {
+    display: block;
+    opacity: 1;
+}
+
+.pepe-gif {
+    width: 120px;
+    height: auto;
+    transform-origin: center;
+    animation: pepe-rotation 15s infinite linear, pepe-pulse 3s infinite alternate;
+}
+
+@keyframes pepe-float {
+    0% {
+        top: 15%;
+        left: 15%;
+        transform: scale(0.8);
+    }
+    10% {
+        top: 70%;
+        left: 25%;
+        transform: scale(1.1);
+    }
+    20% {
+        top: 30%;
+        left: 80%;
+        transform: scale(0.7);
+    }
+    30% {
+        top: 60%;
+        left: 40%;
+        transform: scale(1.2);
+    }
+    40% {
+        top: 20%;
+        left: 60%;
+        transform: scale(0.9);
+    }
+    50% {
+        top: 80%;
+        left: 70%;
+        transform: scale(1);
+    }
+    60% {
+        top: 40%;
+        left: 10%;
+        transform: scale(1.1);
+    }
+    70% {
+        top: 70%;
+        left: 90%;
+        transform: scale(0.8);
+    }
+    80% {
+        top: 10%;
+        left: 50%;
+        transform: scale(1.2);
+    }
+    90% {
+        top: 50%;
+        left: 30%;
+        transform: scale(0.7);
+    }
+    100% {
+        top: 25%;
+        left: 75%;
+        transform: scale(1);
+    }
+}
+
+@keyframes pepe-rotation {
+    0% {
+        transform: rotate(0deg);
+    }
+    25% {
+        transform: rotate(10deg);
+    }
+    50% {
+        transform: rotate(0deg);
+    }
+    75% {
+        transform: rotate(-10deg);
+    }
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
+@keyframes pepe-pulse {
+    0% {
+        filter: brightness(1);
+    }
+    100% {
+        filter: brightness(1.3);
+    }
+} 
