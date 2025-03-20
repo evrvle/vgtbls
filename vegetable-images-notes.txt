@@ -1,0 +1,53 @@
+VEGETABLE IMAGES RECOMMENDATIONS
+
+To complete the update to realistic vegetable images, please add the following images to your "images" folder:
+
+1. tomato.png
+   - A realistic but slightly hand-drawn style tomato
+   - Should include the green stem on top
+   - Recommended size: approximately 100x100px with transparent background
+   - Should have vibrant red color for day mode compatibility
+
+2. pepper.png
+   - A green bell pepper in hand-drawn style 
+   - Ideally at a slight angle to match the previous design's rotation
+   - Recommended size: approximately 100x100px with transparent background
+
+3. cucumber.png
+   - A green cucumber in hand-drawn style
+   - Should be slightly elongated (horizontal orientation)
+   - Recommended size: approximately 100x80px with transparent background
+
+4. carrot.png
+   - An orange carrot with green leaves at the top
+   - Should be slightly taller than wide (vertical orientation)
+   - Recommended size: approximately 60x120px with transparent background
+
+5. broccoli.png
+   - A green broccoli floret with a short brown stem
+   - Recommended size: approximately 90x100px with transparent background
+
+Image Sources Options:
+1. Create your own hand-drawn style vegetable images
+2. Use stock images with transparent backgrounds (make sure you have proper licensing)
+3. Find free vector images with appropriate licensing
+4. Use AI image generators to create custom vegetable images
+
+Style Guidelines:
+- All vegetables should have a consistent hand-drawn style
+- Use transparent backgrounds (PNG format)
+- Images should look cohesive as a set
+- Avoid overly realistic or photographic styles - a slightly stylized, illustrative approach works best
+- Colors should be vibrant for day mode, as night mode will automatically darken them
+
+Night Mode Considerations:
+- The CSS already applies a darker filter to images in night mode
+- No separate night mode images are needed
+
+Implementation Notes:
+- The CSS has been updated to handle these images correctly
+- Images will automatically have drop shadows applied
+- The hover and click effects will still work with the new images
+- Responsive sizing has been maintained
+
+After adding these images to the "images" folder, the website should display the new, more realistic vegetables immediately. 

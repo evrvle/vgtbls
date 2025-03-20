@@ -5,6 +5,7 @@ A playful, responsive landing page with a hand-drawn style where vegetables serv
 ## Features
 
 - Hand-drawn, playful design with CSS animations
+- Realistic vegetable images with a hand-drawn feel
 - Responsive layout that works on mobile and desktop
 - Interactive vegetable links with hover effects
 - Placeholders for future social media links
@@ -13,6 +14,7 @@ A playful, responsive landing page with a hand-drawn style where vegetables serv
 - DJ Pepe frog that moves chaotically and teasingly slow throughout the page in night mode
 - Language switching (English, Spanish, and Russian)
 - Special playful Cyrillic font (Neucha) for Russian language text
+- Emoji favicon with musical note (🎵) for browser tabs
 - User preferences saved across visits
 
 ## Preview
@@ -22,13 +24,14 @@ The landing page displays a garden scene with a wicker basket containing vegetab
 ### Day Mode
 - Sunny outdoor setting with blue sky and green grass
 - Floating clouds in the background
+- Vibrant, detailed vegetable images
 
 ### Night Mode
 - Starry night background with a moon
 - An owl wearing headphones appears
 - Animated mosquitos flying around
 - DJ Pepe frog GIF bobbing around the screen with random movements
-- Darker vegetable colors
+- Darker, moodier vegetable images
 
 ### Vegetable Links
 - Tomato: Links to Instagram
@@ -53,11 +56,17 @@ Each vegetable has a subtle hover effect and placeholder links show a "Coming So
 
 ```
 vegetable-garden/
-├── index.html     # Main HTML structure with multilingual support
-├── styles.css     # CSS styling with day/night mode themes
-├── script.js      # JavaScript for interactivity and animations
-├── pepe-pepedj.gif # DJ Pepe animation for night mode
-└── README.md      # This file
+├── index.html        # Main HTML structure with multilingual support
+├── styles.css        # CSS styling with day/night mode themes
+├── script.js         # JavaScript for interactivity and animations
+├── images/           # Folder containing vegetable images
+│   ├── tomato.png    # Tomato image for Telegram link
+│   ├── pepper.png    # Pepper image for SoundCloud link
+│   ├── cucumber.png  # Cucumber image for YouTube link
+│   ├── carrot.png    # Carrot image for Spotify link
+│   └── broccoli.png  # Broccoli image for Blog link
+├── pepe-pepedj.gif   # DJ Pepe animation for night mode
+└── README.md         # This file
 ```
 
 ## Deploying to Netlify
@@ -65,7 +74,7 @@ vegetable-garden/
 ### Option 1: Deploy with Netlify Drop
 
 1. Visit [Netlify Drop](https://app.netlify.com/drop)
-2. Drag and drop the folder containing your files (index.html, styles.css, script.js, pepe-pepedj.gif)
+2. Drag and drop the folder containing your files (index.html, styles.css, script.js, images/ folder, pepe-pepedj.gif)
 3. Netlify will automatically deploy your site and provide a URL
 
 ### Option 2: Deploy with Git
@@ -86,6 +95,7 @@ vegetable-garden/
 
 ## Customization
 
+- **Vegetable Images**: Replace the images in the "images" folder with your own designs while maintaining the naming convention
 - **Social Media Links**: Update the href attributes in index.html to point to your social media profiles
 - **Colors**: Modify the color values in styles.css to match your brand
 - **Vegetables**: Add or remove vegetables by following the existing pattern in the HTML and CSS
