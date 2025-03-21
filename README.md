@@ -44,6 +44,8 @@ Each vegetable has a subtle hover effect and placeholder links show a "Coming So
 
 ### Interactive Elements
 - Vegetable links that bounce when clicked
+- Animated owl with headphones that floats gently and reacts to hover
+- Hidden easter egg: Tap/click the owl 28 times to unlock a surprise
 - DJ Pepe that has chaotic, teasing movement patterns in night mode
 - DJ Pepe reacts when clicked, performing a special animation
 
@@ -64,7 +66,8 @@ vegetable-garden/
 │   ├── pepper.png    # Pepper image for SoundCloud link
 │   ├── cucumber.png  # Cucumber image for YouTube link
 │   ├── carrot.png    # Carrot image for Spotify link
-│   └── broccoli.png  # Broccoli image for Blog link
+│   ├── broccoli.png  # Broccoli image for Blog link
+│   └── owl.png       # Owl with headphones for night mode
 ├── pepe-pepedj.gif   # DJ Pepe animation for night mode
 └── README.md         # This file
 ```

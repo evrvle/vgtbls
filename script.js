@@ -76,7 +76,6 @@ document.addEventListener('DOMContentLoaded', function() {
             background-color: #FF6347;
             color: white;
             padding: 8px 15px;
-            border-radius: 20px;
             font-size: 1rem;
             transform: translate(-50%, -50%);
             z-index: 100;
@@ -268,110 +267,63 @@ function createClouds() {
 
 // Function to create stars for night mode
 function createStars() {
-    // Create 50 stars
-    for (let i = 0; i < 50; i++) {
+    const container = document.body;
+    const starCount = 100;
+    
+    for (let i = 0; i < starCount; i++) {
         const star = document.createElement('div');
-        star.classList.add('star');
-        
-        // Random star size
-        const size = Math.random() * 3 + 1; // 1-4px
-        star.style.width = `${size}px`;
-        star.style.height = `${size}px`;
+        star.className = 'star';
         
         // Random position
-        star.style.top = `${Math.random() * 60}%`;
-        star.style.left = `${Math.random() * 100}%`;
+        star.style.top = Math.random() * 100 + 'vh';
+        star.style.left = Math.random() * 100 + 'vw';
         
-        // Random twinkle delay
-        star.style.animationDelay = `${Math.random() * 2}s`;
+        // Random size
+        const size = Math.random() * 3 + 1;
+        star.style.width = size + 'px';
+        star.style.height = size + 'px';
         
-        document.body.appendChild(star);
+        // Random twinkle speed
+        star.style.animationDuration = (Math.random() * 2 + 1) + 's';
+        star.style.animationDelay = (Math.random() * 5) + 's';
+        
+        container.appendChild(star);
     }
 }
 
 // Function to create mosquitos for night mode
 function createMosquitos() {
-    const container = document.querySelector('.night-elements');
+    const container = document.body;
+    const mosquitoCount = 10;
     
-    // Create 5 mosquitos
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < mosquitoCount; i++) {
         const mosquito = document.createElement('div');
-        mosquito.classList.add('mosquito');
+        mosquito.className = 'mosquito';
         
-        // Random initial position
-        const posX = Math.random() * window.innerWidth;
-        const posY = Math.random() * window.innerHeight * 0.7;
-        mosquito.style.left = `${posX}px`;
-        mosquito.style.top = `${posY}px`;
+        // Random position
+        mosquito.style.top = Math.random() * 100 + 'vh';
+        mosquito.style.left = Math.random() * 100 + 'vw';
         
         // Create wings
         const leftWing = document.createElement('div');
-        leftWing.classList.add('wing', 'left');
+        leftWing.className = 'wing left';
         
         const rightWing = document.createElement('div');
-        rightWing.classList.add('wing', 'right');
-        rightWing.style.animation = 'wing-flutter-right 0.1s infinite alternate';
+        rightWing.className = 'wing right';
         
         mosquito.appendChild(leftWing);
         mosquito.appendChild(rightWing);
         
-        // Add to container
+        // Add movement
+        setInterval(() => {
+            const newTop = parseFloat(mosquito.style.top) + (Math.random() * 10 - 5);
+            const newLeft = parseFloat(mosquito.style.left) + (Math.random() * 10 - 5);
+            
+            mosquito.style.top = Math.max(0, Math.min(100, newTop)) + 'vh';
+            mosquito.style.left = Math.max(0, Math.min(100, newLeft)) + 'vw';
+        }, 1000);
+        
         container.appendChild(mosquito);
-        
-        // Animate mosquito
-        animateMosquito(mosquito);
-    }
-}
-
-// Function to animate mosquito movement
-function animateMosquito(mosquito) {
-    // Random movement parameters
-    let speedX = (Math.random() - 0.5) * 2;
-    let speedY = (Math.random() - 0.5) * 2;
-    let posX = parseFloat(mosquito.style.left);
-    let posY = parseFloat(mosquito.style.top);
-    
-    function updatePosition() {
-        // Randomly change direction occasionally
-        if (Math.random() < 0.05) {
-            speedX = (Math.random() - 0.5) * 2;
-            speedY = (Math.random() - 0.5) * 2;
-        }
-        
-        // Update position
-        posX += speedX;
-        posY += speedY;
-        
-        // Keep within visible area
-        if (posX < 0 || posX > window.innerWidth) speedX *= -1;
-        if (posY < 0 || posY > window.innerHeight * 0.7) speedY *= -1;
-        
-        // Apply position
-        mosquito.style.left = `${posX}px`;
-        mosquito.style.top = `${posY}px`;
-        
-        // Continue animation if still in night mode
-        if (document.body.classList.contains('night-mode')) {
-            requestAnimationFrame(updatePosition);
-        }
-    }
-    
-    // Start animation when night mode is active
-    const observer = new MutationObserver(mutations => {
-        mutations.forEach(mutation => {
-            if (mutation.attributeName === 'class') {
-                if (document.body.classList.contains('night-mode')) {
-                    requestAnimationFrame(updatePosition);
-                }
-            }
-        });
-    });
-    
-    observer.observe(document.body, { attributes: true });
-    
-    // Start animation if night mode is already active
-    if (document.body.classList.contains('night-mode')) {
-        requestAnimationFrame(updatePosition);
     }
 }
 
@@ -494,4 +446,150 @@ function initDJPepe() {
             100% { transform: scale(1); }
         }
     `, styleSheet.cssRules.length);
-} 
+}
+
+// Store user preferences
+let userPreferences = {
+    language: localStorage.getItem('language') || 'en',
+    mode: localStorage.getItem('mode') || 'day'
+};
+
+// Set initial language and mode
+document.documentElement.lang = userPreferences.language;
+document.body.className = userPreferences.mode + '-mode';
+
+// DOM elements
+const modeToggle = document.getElementById('mode-toggle');
+const langButtons = document.querySelectorAll('.lang-btn');
+
+// Set toggle state based on mode
+if (userPreferences.mode === 'night') {
+    modeToggle.checked = true;
+    createStars();
+    createMosquitos();
+}
+
+// Toggle mode
+modeToggle.addEventListener('change', function() {
+    if (this.checked) {
+        document.body.className = 'night-mode';
+        userPreferences.mode = 'night';
+        createStars();
+        createMosquitos();
+    } else {
+        document.body.className = 'day-mode';
+        userPreferences.mode = 'day';
+        removeNightElements('.star');
+        removeNightElements('.mosquito');
+    }
+    localStorage.setItem('mode', userPreferences.mode);
+});
+
+// Change language
+langButtons.forEach(button => {
+    if (button.dataset.lang === userPreferences.language) {
+        button.classList.add('active');
+    }
+    
+    button.addEventListener('click', function() {
+        userPreferences.language = this.dataset.lang;
+        document.documentElement.lang = userPreferences.language;
+        
+        // Update active button
+        langButtons.forEach(btn => btn.classList.remove('active'));
+        this.classList.add('active');
+        
+        // Save preference
+        localStorage.setItem('language', userPreferences.language);
+    });
+});
+
+// Remove night elements
+function removeNightElements(selector) {
+    const elements = document.querySelectorAll(selector);
+    elements.forEach(element => element.remove());
+}
+
+// Owl tap counter functionality
+let owlTapCount = 0;
+const owl = document.querySelector('.owl');
+const rickrollURL = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ';
+const RICKROLL_THRESHOLD = 28;
+
+// Create counter display element
+const tapCounter = document.createElement('div');
+tapCounter.className = 'tap-counter';
+tapCounter.innerText = '0';
+tapCounter.style.pointerEvents = 'none'; // Prevent interference with clicks
+// Set initial position off-screen
+tapCounter.style.left = '-9999px';
+tapCounter.style.top = '-9999px';
+document.body.appendChild(tapCounter); // Append to body instead of owl for global positioning
+
+// Handle owl taps/clicks
+owl.addEventListener('click', function(e) {
+    e.preventDefault(); // Prevent default behavior
+    
+    // Increment counter
+    owlTapCount++;
+    
+    // Generate random position for the counter
+    const randomX = Math.floor(Math.random() * (window.innerWidth - 100));
+    const randomY = Math.floor(Math.random() * (window.innerHeight - 100));
+    
+    // Position the counter at random coordinates
+    tapCounter.style.left = randomX + 'px';
+    tapCounter.style.top = randomY + 'px';
+    
+    // Generate a random bright color for the counter
+    const hue = Math.floor(Math.random() * 360); // Random hue (0-359)
+    tapCounter.style.color = `hsl(${hue}, 100%, 70%)`; // Bright, saturated color
+    tapCounter.style.textShadow = `0 0 5px hsl(${hue}, 100%, 40%), 0 0 10px rgba(255,255,255,0.5)`; // Matching shadow
+    
+    // Update counter text
+    tapCounter.innerText = owlTapCount;
+    
+    // Remove previous animation if still active
+    tapCounter.classList.remove('show');
+    
+    // Trigger reflow to restart animation
+    void tapCounter.offsetWidth;
+    
+    // Add animation class
+    tapCounter.classList.add('show');
+    
+    // Add a small "tap" animation to the owl
+    this.style.transform = 'translateY(5px)';
+    setTimeout(() => {
+        this.style.transform = '';
+    }, 100);
+    
+    // Fade out counter
+    setTimeout(() => {
+        tapCounter.classList.remove('show');
+    }, 1500);
+    
+    // Check for rickroll threshold
+    if (owlTapCount >= RICKROLL_THRESHOLD) {
+        // Show message in a random position
+        const finalRandomX = Math.floor(Math.random() * (window.innerWidth - 300));
+        const finalRandomY = Math.floor(Math.random() * (window.innerHeight - 100));
+        
+        tapCounter.style.left = finalRandomX + 'px';
+        tapCounter.style.top = finalRandomY + 'px';
+        // Special color for rickroll message
+        tapCounter.style.color = '#FF6347'; // Tomato red
+        tapCounter.style.textShadow = '0 0 5px #800000, 0 0 10px rgba(255,255,255,0.5)';
+        tapCounter.innerText = "Never gonna give you up!";
+        tapCounter.classList.add('show');
+        
+        // Add special animation to owl using our CSS class
+        owl.classList.add('rickroll');
+        owl.querySelector('.owl-image').style.filter = 'hue-rotate(180deg) brightness(1.3)';
+        
+        // Redirect after a short delay
+        setTimeout(() => {
+            window.location.href = rickrollURL;
+        }, 1000);
+    }
+}); 
