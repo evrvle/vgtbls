@@ -1,10 +1,378 @@
-document.addEventListener('DOMContentLoaded', function() {
-    // Set default language
-    document.documentElement.lang = 'en';
+// Register Service Worker for offline functionality
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js')
+        .then(registration => {
+            console.log('Service Worker registered with scope:', registration.scope);
+        })
+        .catch(error => {
+            console.error('Service Worker registration failed:', error);
+        });
+    });
+}
+
+// Debounce function to limit expensive operations
+function debounce(func, wait) {
+    let timeout;
+    return function() {
+        const context = this;
+        const args = arguments;
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(context, args), wait);
+    };
+}
+
+// Music Metadata Management - Enhance SEO for audio content
+function initMusicMetadata() {
+    console.log('Initializing music metadata');
     
-    // Initialize mode toggle and language selector
+    // Create structured data for music content if not already present
+    if (!document.querySelector('script[type="application/ld+json"]#music-data')) {
+        // Sample music data - replace with your actual music information
+        const musicData = {
+            "@context": "https://schema.org",
+            "@type": "MusicPlaylist",
+            "name": "VGTBLS DJ Mix Collection",
+            "numTracks": 12,
+            "track": [
+                {
+                    "@type": "MusicRecording",
+                    "name": "Midnight Garden Mix",
+                    "byArtist": "VGTBLS DJ Collective",
+                    "duration": "PT1H12M",
+                    "genre": "Electronic",
+                    "isrcCode": "USRC17607839",
+                    "datePublished": "2023-12-01"
+                },
+                {
+                    "@type": "MusicRecording",
+                    "name": "Techno Vegetable Session",
+                    "byArtist": "VGTBLS DJ Collective",
+                    "duration": "PT58M",
+                    "genre": "Techno",
+                    "isrcCode": "USRC17608123",
+                    "datePublished": "2023-12-15"
+                },
+                {
+                    "@type": "MusicRecording",
+                    "name": "Deep House Harvest",
+                    "byArtist": "VGTBLS DJ Collective",
+                    "duration": "PT1H25M",
+                    "genre": "House",
+                    "isrcCode": "USRC17609345",
+                    "datePublished": "2023-12-22"
+                }
+            ]
+        };
+        
+        const script = document.createElement('script');
+        script.type = 'application/ld+json';
+        script.id = 'music-data';
+        script.textContent = JSON.stringify(musicData);
+        document.head.appendChild(script);
+    }
+    
+    // Add music-specific meta tags dynamically
+    const metaTags = [
+        { name: 'music:creator', content: 'VGTBLS DJ Collective' },
+        { name: 'music:album', content: 'VGTBLS Podcast Mixes Vol. 1' },
+        { name: 'music:musician', content: 'VGTBLS DJ Collective' }
+    ];
+    
+    metaTags.forEach(tag => {
+        if (!document.querySelector(`meta[name="${tag.name}"]`)) {
+            const meta = document.createElement('meta');
+            meta.name = tag.name;
+            meta.content = tag.content;
+            document.head.appendChild(meta);
+        }
+    });
+    
+    // Create HTML Audio tag in night mode for background ambient sounds
+    if (document.body.classList.contains('night-mode') && !document.getElementById('ambient-sound')) {
+        const ambientAudio = document.createElement('audio');
+        ambientAudio.id = 'ambient-sound';
+        ambientAudio.loop = true;
+        ambientAudio.volume = 0.1;
+        ambientAudio.preload = 'auto';
+        
+        const source = document.createElement('source');
+        source.src = 'audio/ambient-loop.mp3';
+        source.type = 'audio/mpeg';
+        
+        ambientAudio.appendChild(source);
+        document.body.appendChild(ambientAudio);
+        
+        // Only play if user has interacted with the page (to comply with autoplay policies)
+        document.addEventListener('click', function audioPlayHandler() {
+            ambientAudio.play().catch(e => console.log('Ambient audio play error:', e));
+            document.removeEventListener('click', audioPlayHandler);
+        }, { once: true });
+    }
+}
+
+// Enhance audio preloading to improve performance for music-related sounds
+function enhanceAudioPreloading() {
+    // Create audio context for better performance when available
+    let audioContext;
+    try {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        audioContext = new AudioContext();
+        
+        // Resume audioContext on user interaction (needed for newer browser policies)
+        document.addEventListener('click', function resumeAudio() {
+            if (audioContext.state === 'suspended') {
+                audioContext.resume().then(() => {
+                    console.log('AudioContext resumed successfully');
+                });
+            }
+            document.removeEventListener('click', resumeAudio);
+        }, { once: true });
+        
+    } catch (e) {
+        console.log('Web Audio API not supported:', e);
+    }
+}
+
+// Create and animate dancing Pepe
+function createDancingPepe() {
+    console.log('Creating dancing Pepe');
+    
+    // Create Pepe element if it doesn't exist
+    if (!document.querySelector('.dancing-pepe')) {
+        // Create a link element instead of a div
+        const pepeLink = document.createElement('a');
+        pepeLink.href = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ';
+        pepeLink.target = '_blank'; // Open in new tab
+        pepeLink.rel = 'noopener'; // Security best practice
+        pepeLink.className = 'pepe-link'; // Add class for styling
+        
+        // Create the pepe div inside the link
+        const pepe = document.createElement('div');
+        pepe.className = 'dancing-pepe active'; // Add active class immediately
+        pepeLink.appendChild(pepe);
+        document.body.appendChild(pepeLink);
+        
+        // Randomize starting position - start off-screen to ease in
+        const randomizePosition = (offScreen = false) => {
+            const windowWidth = window.innerWidth;
+            const windowHeight = window.innerHeight;
+            
+            if (offScreen) {
+                // Start just off the right edge of the screen
+                pepeLink.style.left = `${windowWidth + 20}px`;
+                pepeLink.style.top = `${windowHeight * 0.3 + (Math.random() * windowHeight * 0.4)}px`;
+            } else {
+                // Keep Pepe in a more contained area (middle 70% of screen) to avoid edge bouncing
+                const marginX = windowWidth * 0.15;
+                const marginY = windowHeight * 0.15;
+                pepeLink.style.left = `${marginX + Math.random() * (windowWidth - marginX * 2)}px`;
+                pepeLink.style.top = `${marginY + Math.random() * (windowHeight - marginY * 2)}px`;
+            }
+        };
+        
+        // Initially start off-screen
+        randomizePosition(true);
+        
+        // Add smoother movement physics
+        let isTeasing = false;
+        let isTouchingEdge = false;
+        let targetX = null;
+        let targetY = null;
+        let currentX = parseInt(pepeLink.style.left);
+        let currentY = parseInt(pepeLink.style.top);
+        let velocityX = 1;
+        let velocityY = 0;
+        
+        // No delay for making Pepe active - already active when created
+        
+        // Handle mouse interaction
+        pepe.addEventListener('mouseenter', () => {
+            if (!isTeasing) {
+                isTeasing = true;
+                pepe.classList.add('teasing');
+                
+                // After teasing animation completes, move to a new location smoothly
+                setTimeout(() => {
+                    randomizePosition();
+                    pepe.classList.remove('teasing');
+                    isTeasing = false;
+                    // Set new target rather than teleporting
+                    targetX = parseInt(pepeLink.style.left);
+                    targetY = parseInt(pepeLink.style.top);
+                }, 3000);
+            }
+        });
+        
+        // Occasionally make Pepe appear and disappear, but less frequently
+        setInterval(() => {
+            if (Math.random() > 0.85) { // Reduced frequency (was 0.7)
+                // Fade out/in smoothly rather than abrupt changes
+                pepe.style.transition = 'opacity 0.8s ease-in-out';
+                pepe.style.opacity = pepe.style.opacity === '0' ? '0.9' : '0';
+                
+                setTimeout(() => {
+                    if (pepe.style.opacity === '0') {
+                        // If we faded out, change position before fading back in
+                        pepe.style.transition = 'none';
+                        randomizePosition();
+                        // Slightly adjust size occasionally
+                        if (Math.random() > 0.5) {
+                            const size = 70 + Math.random() * 20; // Less dramatic size changes (was 60-100)
+                            pepe.style.width = `${size}px`;
+                            pepe.style.height = `${size}px`;
+                        }
+                        setTimeout(() => {
+                            pepe.style.transition = 'opacity 0.8s ease-in-out';
+                            pepe.style.opacity = '0.9';
+                        }, 50);
+                    }
+                    // Reset transition after fade completes
+                    setTimeout(() => {
+                        pepe.style.transition = 'none';
+                    }, 850);
+                }, 800);
+            }
+        }, 10000); // Less frequent checks (was 5000)
+        
+        // Advanced smoother movement (override CSS animation)
+        pepe.style.animation = 'none';
+        
+        // Pick a new random target every few seconds
+        setInterval(() => {
+            if (!isTeasing && Math.random() > 0.3) {
+                const windowWidth = window.innerWidth;
+                const windowHeight = window.innerHeight;
+                const rect = pepeLink.getBoundingClientRect();
+                
+                // Keep Pepe in a more contained area
+                const marginX = windowWidth * 0.15;
+                const marginY = windowHeight * 0.15;
+                
+                // Set a new target point to move towards
+                targetX = marginX + Math.random() * (windowWidth - marginX * 2);
+                targetY = marginY + Math.random() * (windowHeight - marginY * 2);
+            }
+        }, 5000);
+        
+        const movePepe = () => {
+            if (isTeasing) {
+                requestAnimationFrame(movePepe);
+                return;
+            }
+            
+            const rect = pepeLink.getBoundingClientRect();
+            currentX = rect.left;
+            currentY = rect.top;
+            
+            // If we don't have a target yet, set one
+            if (targetX === null || targetY === null) {
+                targetX = currentX;
+                targetY = currentY;
+            }
+            
+            // Calculate direction to target
+            const dx = targetX - currentX;
+            const dy = targetY - currentY;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            
+            // If we're close to target, slow down
+            const maxSpeed = distance > 100 ? 3 : Math.max(0.5, distance / 30);
+            
+            // Smoothly adjust velocity towards target
+            velocityX = velocityX * 0.95 + (dx / distance) * 0.05 * maxSpeed;
+            velocityY = velocityY * 0.95 + (dy / distance) * 0.05 * maxSpeed;
+            
+            // Limit max speed
+            const currentSpeed = Math.sqrt(velocityX * velocityX + velocityY * velocityY);
+            if (currentSpeed > maxSpeed) {
+                velocityX = (velocityX / currentSpeed) * maxSpeed;
+                velocityY = (velocityY / currentSpeed) * maxSpeed;
+            }
+            
+            // Smooth bounce off edges with less aggressive behavior
+            if (currentX <= 0 || currentX >= window.innerWidth - rect.width) {
+                velocityX *= -0.8; // Gentler bounce (was -1.2)
+                
+                // Push away from the edge
+                if (currentX <= 0) currentX = 1;
+                if (currentX >= window.innerWidth - rect.width) currentX = window.innerWidth - rect.width - 1;
+                
+                isTouchingEdge = true;
+                setTimeout(() => { isTouchingEdge = false; }, 500);
+            }
+            
+            if (currentY <= 0 || currentY >= window.innerHeight - rect.height) {
+                velocityY *= -0.8; // Gentler bounce (was -1.2)
+                
+                // Push away from the edge
+                if (currentY <= 0) currentY = 1;
+                if (currentY >= window.innerHeight - rect.height) currentY = window.innerHeight - rect.height - 1;
+                
+                isTouchingEdge = true;
+                setTimeout(() => { isTouchingEdge = false; }, 500);
+            }
+            
+            // Add very subtle gravity-like effect
+            velocityY += 0.03; // Reduced (was 0.1)
+            
+            // Add friction to prevent excessive speed
+            velocityX *= 0.99;
+            velocityY *= 0.99;
+            
+            // Edge-touching behavior: pick a new target rather than teleporting
+            if (isTouchingEdge && Math.random() > 0.9) { // Less frequent (was 0.7)
+                const windowWidth = window.innerWidth;
+                const windowHeight = window.innerHeight;
+                
+                // Keep away from edges
+                const marginX = windowWidth * 0.2;
+                const marginY = windowHeight * 0.2;
+                
+                targetX = marginX + Math.random() * (windowWidth - marginX * 2);
+                targetY = marginY + Math.random() * (windowHeight - marginY * 2);
+            } else {
+                // Apply movement
+                currentX += velocityX;
+                currentY += velocityY;
+                
+                pepeLink.style.left = `${currentX}px`;
+                pepeLink.style.top = `${currentY}px`;
+            }
+            
+            // Add subtle rotation based on direction - smoother and less dramatic
+            const rotation = Math.atan2(velocityY, velocityX) * (180 / Math.PI) * 0.3; // Reduced rotation factor (added *0.3)
+            pepe.style.transform = `rotate(${rotation}deg)`;
+            
+            requestAnimationFrame(movePepe);
+        };
+        
+        movePepe();
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM fully loaded and parsed');
+    
+    // Initialize functionality
     initModeToggle();
     initLanguageSelector();
+    initMusicMetadata();
+    enhanceAudioPreloading();
+    
+    // Create mode-specific elements
+    if (document.body.classList.contains('night-mode')) {
+        createStars();
+        createMosquitos();
+    } else {
+        createClouds(); // Create clouds only in day mode
+    }
+    
+    // Add dancing Pepe
+    createDancingPepe();
+    
+    // Set default language
+    document.documentElement.lang = 'en';
     
     // Get all vegetable links
     const vegLinks = document.querySelectorAll('.veg-link');
@@ -106,6 +474,7 @@ document.addEventListener('DOMContentLoaded', function() {
             border-radius: 50%;
             opacity: 0.8;
             animation: float-cloud linear infinite;
+            will-change: transform;
         }
         
         /* Night mode message */
@@ -115,42 +484,31 @@ document.addEventListener('DOMContentLoaded', function() {
     `;
     document.head.appendChild(style);
     
-    // Create floating clouds for background ambiance (day mode)
-    createClouds();
+    // Optimize hover effects using event delegation
+    document.querySelector('.basket').addEventListener('mouseover', function(e) {
+        const vegLink = e.target.closest('.veg-link');
+        if (vegLink) {
+            const vegImage = vegLink.querySelector('.veg-image');
+            if (vegImage) {
+                vegImage.style.boxShadow = '0 0 15px rgba(255,255,255,0.7)';
+            }
+        }
+    });
     
-    // Create stars for night mode
-    createStars();
-    
-    // Add mosquitos for night mode
-    createMosquitos();
-    
-    // Initialize DJ Pepe
-    initDJPepe();
-    
-    // Add subtle hover sound effect
-    vegLinks.forEach(link => {
-        link.addEventListener('mouseenter', () => {
-            // Create a subtle pop sound
-            const hoverSound = new Audio();
-            hoverSound.volume = 0.2;
-            
-            // We're not actually loading a sound file to keep things simple
-            // This is just a placeholder for where you would add sound if desired
-            
-            // Light shadow pulse effect on hover
-            link.querySelector('.veg-image').style.boxShadow = '0 0 15px rgba(255,255,255,0.7)';
-        });
-        
-        link.addEventListener('mouseleave', () => {
-            // Reset shadow
-            setTimeout(() => {
-                if (document.body.classList.contains('night-mode')) {
-                    link.querySelector('.veg-image').style.boxShadow = '2px 2px 5px rgba(0, 0, 0, 0.5)';
-                } else {
-                    link.querySelector('.veg-image').style.boxShadow = '2px 2px 5px rgba(0, 0, 0, 0.2)';
-                }
-            }, 300);
-        });
+    document.querySelector('.basket').addEventListener('mouseout', function(e) {
+        const vegLink = e.target.closest('.veg-link');
+        if (vegLink) {
+            const vegImage = vegLink.querySelector('.veg-image');
+            if (vegImage) {
+                setTimeout(() => {
+                    if (document.body.classList.contains('night-mode')) {
+                        vegImage.style.boxShadow = '2px 2px 5px rgba(0, 0, 0, 0.5)';
+                    } else {
+                        vegImage.style.boxShadow = '2px 2px 5px rgba(0, 0, 0, 0.2)';
+                    }
+                }, 300);
+            }
+        }
     });
 });
 
@@ -169,9 +527,13 @@ function initModeToggle() {
         if (this.checked) {
             document.body.classList.add('night-mode');
             localStorage.setItem('preferred-mode', 'night');
+            createStars();
+            createMosquitos();
         } else {
             document.body.classList.remove('night-mode');
             localStorage.setItem('preferred-mode', 'day');
+            removeNightElements('.star');
+            removeNightElements('.mosquito');
         }
     });
 }
@@ -295,14 +657,20 @@ function createStars() {
 function createMosquitos() {
     const container = document.body;
     const mosquitoCount = 10;
+    const mosquitos = [];
     
     for (let i = 0; i < mosquitoCount; i++) {
         const mosquito = document.createElement('div');
         mosquito.className = 'mosquito';
         
         // Random position
-        mosquito.style.top = Math.random() * 100 + 'vh';
-        mosquito.style.left = Math.random() * 100 + 'vw';
+        const posY = Math.random() * 100;
+        const posX = Math.random() * 100;
+        mosquito.style.top = posY + 'vh';
+        mosquito.style.left = posX + 'vw';
+        
+        // For improved animation performance
+        mosquito.style.willChange = 'transform';
         
         // Create wings
         const leftWing = document.createElement('div');
@@ -314,138 +682,49 @@ function createMosquitos() {
         mosquito.appendChild(leftWing);
         mosquito.appendChild(rightWing);
         
-        // Add movement
-        setInterval(() => {
-            const newTop = parseFloat(mosquito.style.top) + (Math.random() * 10 - 5);
-            const newLeft = parseFloat(mosquito.style.left) + (Math.random() * 10 - 5);
-            
-            mosquito.style.top = Math.max(0, Math.min(100, newTop)) + 'vh';
-            mosquito.style.left = Math.max(0, Math.min(100, newLeft)) + 'vw';
-        }, 1000);
+        // Store mosquito state for RAF animation
+        mosquitos.push({
+            element: mosquito,
+            x: posX,
+            y: posY,
+            speedX: Math.random() * 0.2 - 0.1,
+            speedY: Math.random() * 0.2 - 0.1
+        });
         
         container.appendChild(mosquito);
     }
-}
-
-// Function to initialize DJ Pepe behavior
-function initDJPepe() {
-    const djPepe = document.querySelector('.dj-pepe');
     
-    // Extra random movements for Pepe
-    let timeoutId;
-    
-    function addRandomMovement() {
-        // Stop any previous timeout
-        if (timeoutId) clearTimeout(timeoutId);
-        
-        // Only proceed if in night mode
-        if (!document.body.classList.contains('night-mode')) return;
-        
-        // Random jump to a new position
-        if (Math.random() < 0.3) {  // 30% chance of random jump
-            const randomTop = Math.random() * 80 + 10; // 10% to 90% of viewport height
-            const randomLeft = Math.random() * 80 + 10; // 10% to 90% of viewport width
-            const randomScale = Math.random() * 0.5 + 0.7; // 0.7 to 1.2 scale
-            const randomRotation = Math.random() * 360; // 0 to 360 degrees
-            
-            // Apply the jump animation
-            djPepe.style.transition = 'none'; // Disable transition for instant jump
-            djPepe.style.animationPlayState = 'paused'; // Pause main animation temporarily
-            
-            // Move to random position
-            djPepe.style.top = `${randomTop}%`;
-            djPepe.style.left = `${randomLeft}%`;
-            djPepe.style.transform = `scale(${randomScale}) rotate(${randomRotation}deg)`;
-            
-            // Resume animation after a short delay
-            setTimeout(() => {
-                djPepe.style.transition = 'all 0.5s ease'; // Re-enable transitions
-                djPepe.style.animationPlayState = 'running'; // Resume animation
-            }, 100);
+    // Animate all mosquitos in a single requestAnimationFrame loop
+    function animateMosquitos() {
+        if (!document.body.classList.contains('night-mode')) {
+            return; // Stop animation if not in night mode
         }
         
-        // Add a brief shake effect occasionally
-        if (Math.random() < 0.2) {  // 20% chance of shaking
-            djPepe.style.animation = 'pepe-shake 0.5s ease';
+        mosquitos.forEach(mosquito => {
+            // Update position
+            mosquito.x += mosquito.speedX;
+            mosquito.y += mosquito.speedY;
             
-            setTimeout(() => {
-                djPepe.style.animation = 'pepe-float 60s infinite alternate ease-in-out';
-            }, 500);
-        }
-        
-        // Schedule next random movement
-        const nextMovementDelay = Math.random() * 10000 + 5000; // 5-15 seconds
-        timeoutId = setTimeout(addRandomMovement, nextMovementDelay);
-    }
-    
-    // Click interaction with DJ Pepe
-    djPepe.addEventListener('click', function() {
-        // Add a reaction animation
-        this.style.animation = 'pepe-excited 1s ease';
-        
-        // Play a sound or do something fun on click
-        // (Placeholder for actual interaction)
-        
-        // Reset animation after effect completes
-        setTimeout(() => {
-            this.style.animation = 'pepe-float 60s infinite alternate ease-in-out';
-        }, 1000);
-    });
-    
-    // Start random movements when night mode is activated
-    const observer = new MutationObserver(mutations => {
-        mutations.forEach(mutation => {
-            if (mutation.attributeName === 'class') {
-                if (document.body.classList.contains('night-mode')) {
-                    addRandomMovement();
-                    
-                    // Add click interaction
-                    djPepe.style.pointerEvents = 'auto';
-                } else {
-                    // Remove click interaction in day mode
-                    djPepe.style.pointerEvents = 'none';
-                    
-                    // Clear any pending timeouts
-                    if (timeoutId) clearTimeout(timeoutId);
-                }
+            // Boundary check
+            if (mosquito.x < 0 || mosquito.x > 100) mosquito.speedX *= -1;
+            if (mosquito.y < 0 || mosquito.y > 100) mosquito.speedY *= -1;
+            
+            // Apply position
+            mosquito.element.style.left = mosquito.x + 'vw';
+            mosquito.element.style.top = mosquito.y + 'vh';
+            
+            // Occasionally change direction
+            if (Math.random() < 0.01) {
+                mosquito.speedX = Math.random() * 0.2 - 0.1;
+                mosquito.speedY = Math.random() * 0.2 - 0.1;
             }
         });
-    });
-    
-    observer.observe(document.body, { attributes: true });
-    
-    // Start if already in night mode
-    if (document.body.classList.contains('night-mode')) {
-        addRandomMovement();
-        djPepe.style.pointerEvents = 'auto';
+        
+        requestAnimationFrame(animateMosquitos);
     }
     
-    // Add shake keyframe animation
-    const styleSheet = document.styleSheets[document.styleSheets.length - 1];
-    styleSheet.insertRule(`
-        @keyframes pepe-shake {
-            0%, 100% { transform: translateX(0) rotate(0); }
-            10%, 30%, 50%, 70%, 90% { transform: translateX(-10px) rotate(-5deg); }
-            20%, 40%, 60%, 80% { transform: translateX(10px) rotate(5deg); }
-        }
-    `, styleSheet.cssRules.length);
-    
-    // Add excited keyframe animation
-    styleSheet.insertRule(`
-        @keyframes pepe-excited {
-            0% { transform: scale(1); }
-            10% { transform: scale(1.3) rotate(10deg); }
-            20% { transform: scale(0.8) rotate(-15deg); }
-            30% { transform: scale(1.2) rotate(5deg); }
-            40% { transform: scale(0.9) rotate(-5deg); }
-            50% { transform: scale(1.1); }
-            60% { transform: scale(1) rotate(15deg); }
-            70% { transform: scale(1.2) rotate(-10deg); }
-            80% { transform: scale(0.9) rotate(5deg); }
-            90% { transform: scale(1.1) rotate(-5deg); }
-            100% { transform: scale(1); }
-        }
-    `, styleSheet.cssRules.length);
+    // Start the animation loop
+    requestAnimationFrame(animateMosquitos);
 }
 
 // Store user preferences
@@ -508,88 +787,4 @@ langButtons.forEach(button => {
 function removeNightElements(selector) {
     const elements = document.querySelectorAll(selector);
     elements.forEach(element => element.remove());
-}
-
-// Owl tap counter functionality
-let owlTapCount = 0;
-const owl = document.querySelector('.owl');
-const rickrollURL = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ';
-const RICKROLL_THRESHOLD = 28;
-
-// Create counter display element
-const tapCounter = document.createElement('div');
-tapCounter.className = 'tap-counter';
-tapCounter.innerText = '0';
-tapCounter.style.pointerEvents = 'none'; // Prevent interference with clicks
-// Set initial position off-screen
-tapCounter.style.left = '-9999px';
-tapCounter.style.top = '-9999px';
-document.body.appendChild(tapCounter); // Append to body instead of owl for global positioning
-
-// Handle owl taps/clicks
-owl.addEventListener('click', function(e) {
-    e.preventDefault(); // Prevent default behavior
-    
-    // Increment counter
-    owlTapCount++;
-    
-    // Generate random position for the counter
-    const randomX = Math.floor(Math.random() * (window.innerWidth - 100));
-    const randomY = Math.floor(Math.random() * (window.innerHeight - 100));
-    
-    // Position the counter at random coordinates
-    tapCounter.style.left = randomX + 'px';
-    tapCounter.style.top = randomY + 'px';
-    
-    // Generate a random bright color for the counter
-    const hue = Math.floor(Math.random() * 360); // Random hue (0-359)
-    tapCounter.style.color = `hsl(${hue}, 100%, 70%)`; // Bright, saturated color
-    tapCounter.style.textShadow = `0 0 5px hsl(${hue}, 100%, 40%), 0 0 10px rgba(255,255,255,0.5)`; // Matching shadow
-    
-    // Update counter text
-    tapCounter.innerText = owlTapCount;
-    
-    // Remove previous animation if still active
-    tapCounter.classList.remove('show');
-    
-    // Trigger reflow to restart animation
-    void tapCounter.offsetWidth;
-    
-    // Add animation class
-    tapCounter.classList.add('show');
-    
-    // Add a small "tap" animation to the owl
-    this.style.transform = 'translateY(5px)';
-    setTimeout(() => {
-        this.style.transform = '';
-    }, 100);
-    
-    // Fade out counter
-    setTimeout(() => {
-        tapCounter.classList.remove('show');
-    }, 1500);
-    
-    // Check for rickroll threshold
-    if (owlTapCount >= RICKROLL_THRESHOLD) {
-        // Show message in a random position
-        const finalRandomX = Math.floor(Math.random() * (window.innerWidth - 300));
-        const finalRandomY = Math.floor(Math.random() * (window.innerHeight - 100));
-        
-        tapCounter.style.left = finalRandomX + 'px';
-        tapCounter.style.top = finalRandomY + 'px';
-        // Special color for rickroll message
-        tapCounter.style.color = '#FF6347'; // Tomato red
-        tapCounter.style.textShadow = '0 0 5px #800000, 0 0 10px rgba(255,255,255,0.5)';
-        tapCounter.innerText = "Never gonna give you up!";
-        tapCounter.classList.add('show');
-        
-        // Add special animation to owl using our CSS class
-        owl.classList.add('rickroll');
-        owl.querySelector('.owl-image').style.filter = 'hue-rotate(180deg) brightness(1.3)';
-        
-        // Redirect after a short delay
-        setTimeout(() => {
-            window.location.href = rickrollURL;
-        }, 1000);
-    }
-}); 
+} 

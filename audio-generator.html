@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Audio File Generator</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        button { padding: 10px 15px; margin: 5px; cursor: pointer; }
+        .sound-group { margin-bottom: 20px; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        audio { display: block; margin: 10px 0; }
+        h2 { margin-top: 0; }
+    </style>
+</head>
+<body>
+    <h1>Audio Generator for Owl Tap Counter</h1>
+    <p>Generate and download sound effects for the owl tap counter.</p>
+    
+    <div class="sound-group">
+        <h2>Tap Sound</h2>
+        <button id="generateTap">Generate Tap Sound</button>
+        <button id="downloadTap">Download as tap-sound.mp3</button>
+        <audio id="tapAudio" controls></audio>
+    </div>
+    
+    <div class="sound-group">
+        <h2>Rick Roll Intro</h2>
+        <button id="generateRick">Generate Rick Roll Intro</button>
+        <button id="downloadRick">Download as rick-intro.mp3</button>
+        <audio id="rickAudio" controls></audio>
+    </div>
+    
+    <script>
+        // Audio context setup
+        let audioContext;
+        let tapBuffer;
+        let rickBuffer;
+        
+        // Initialize audio context on user interaction (browser policy)
+        function initAudioContext() {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+        
+        // Generate tap sound - a short, high-pitched 'pop'
+        document.getElementById('generateTap').addEventListener('click', function() {
+            initAudioContext();
+            
+            const duration = 0.15; // 150ms
+            const sampleRate = audioContext.sampleRate;
+            const numSamples = duration * sampleRate;
+            const buffer = audioContext.createBuffer(1, numSamples, sampleRate);
+            const channelData = buffer.getChannelData(0);
+            
+            // Generate a simple 'pop' sound
+            for (let i = 0; i < numSamples; i++) {
+                const t = i / sampleRate;
+                // Start with high frequency that decays
+                const frequency = 1200 - 4000 * t;
+                // Amplitude decays over time
+                const amplitude = Math.max(0, 0.5 * (1 - (i / numSamples) * 4));
+                channelData[i] = amplitude * Math.sin(frequency * t * 2 * Math.PI);
+            }
+            
+            tapBuffer = buffer;
+            playBuffer(tapBuffer, 'tapAudio');
+        });
+        
+        // Generate Rick Roll intro - a sound that suggests "Never gonna give you up"
+        document.getElementById('generateRick').addEventListener('click', function() {
+            initAudioContext();
+            
+            const duration = 1.5; // 1.5 seconds
+            const sampleRate = audioContext.sampleRate;
+            const numSamples = duration * sampleRate;
+            const buffer = audioContext.createBuffer(1, numSamples, sampleRate);
+            const channelData = buffer.getChannelData(0);
+            
+            // Generate a simple intro with notes resembling Rick Astley's intro
+            const noteFrequencies = [
+                {freq: 392.00, duration: 0.2}, // G4
+                {freq: 440.00, duration: 0.2}, // A4
+                {freq: 349.23, duration: 0.2}, // F4
+                {freq: 392.00, duration: 0.2}, // G4
+                {freq: 523.25, duration: 0.25}, // C5
+                {freq: 493.88, duration: 0.35}  // B4
+            ];
+            
+            let timePassed = 0;
+            
+            for (const note of noteFrequencies) {
+                const startSample = Math.floor(timePassed * sampleRate);
+                const endSample = Math.floor((timePassed + note.duration) * sampleRate);
+                
+                for (let i = startSample; i < endSample && i < numSamples; i++) {
+                    const t = (i - startSample) / sampleRate;
+                    // ADSR envelope (simple)
+                    let amplitude;
+                    const noteDuration = note.duration;
+                    if (t < 0.05) { // Attack
+                        amplitude = t / 0.05 * 0.5;
+                    } else if (t < 0.2) { // Decay
+                        amplitude = 0.5 - (t - 0.05) / 0.15 * 0.1;
+                    } else if (t < noteDuration - 0.1) { // Sustain
+                        amplitude = 0.4;
+                    } else { // Release
+                        amplitude = 0.4 * (1 - (t - (noteDuration - 0.1)) / 0.1);
+                    }
+                    
+                    channelData[i] += amplitude * Math.sin(note.freq * t * 2 * Math.PI);
+                }
+                
+                timePassed += note.duration;
+            }
+            
+            rickBuffer = buffer;
+            playBuffer(rickBuffer, 'rickAudio');
+        });
+        
+        // Play a buffer through an audio element
+        function playBuffer(buffer, elementId) {
+            const audioElement = document.getElementById(elementId);
+            
+            // Convert buffer to WAV Blob
+            const wavBlob = bufferToWave(buffer, buffer.length);
+            
+            // Set as source for audio element
+            const audioURL = URL.createObjectURL(wavBlob);
+            audioElement.src = audioURL;
+            audioElement.play();
+        }
+        
+        // Set up download buttons
+        document.getElementById('downloadTap').addEventListener('click', function() {
+            if (tapBuffer) {
+                downloadBuffer(tapBuffer, 'tap-sound.mp3');
+            } else {
+                alert('Please generate the tap sound first');
+            }
+        });
+        
+        document.getElementById('downloadRick').addEventListener('click', function() {
+            if (rickBuffer) {
+                downloadBuffer(rickBuffer, 'rick-intro.mp3');
+            } else {
+                alert('Please generate the rick roll intro first');
+            }
+        });
+        
+        // Download buffer as MP3
+        function downloadBuffer(buffer, filename) {
+            // First convert to WAV
+            const wavBlob = bufferToWave(buffer, buffer.length);
+            
+            // Create download link
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(wavBlob);
+            a.download = filename;
+            a.click();
+        }
+        
+        // Convert AudioBuffer to WAV format
+        function bufferToWave(buffer, len) {
+            const numOfChan = buffer.numberOfChannels;
+            const length = len * numOfChan * 2 + 44;
+            const outBuffer = new ArrayBuffer(length);
+            const view = new DataView(outBuffer);
+            const channels = [];
+            let offset = 0;
+            let pos = 0;
+            
+            // Write WAVE header
+            setUint32(view, 0, 0x46464952); // "RIFF"
+            setUint32(view, 4, length - 8); // file length - 8
+            setUint32(view, 8, 0x45564157); // "WAVE"
+            
+            setUint32(view, 12, 0x20746d66); // "fmt " chunk
+            setUint32(view, 16, 16); // length = 16
+            setUint16(view, 20, 1); // PCM (uncompressed)
+            setUint16(view, 22, numOfChan);
+            setUint32(view, 24, buffer.sampleRate);
+            setUint32(view, 28, buffer.sampleRate * 2 * numOfChan); // avg. bytes/sec
+            setUint16(view, 32, numOfChan * 2); // block-align
+            setUint16(view, 34, 16); // 16-bit
+            
+            setUint32(view, 36, 0x61746164); // "data" - chunk
+            setUint32(view, 40, length - 44); // chunk length
+            
+            // Extract channels
+            for (let i = 0; i < numOfChan; i++) {
+                channels.push(buffer.getChannelData(i));
+            }
+            
+            // Write interleaved data
+            for (let i = 0; i < len; i++) {
+                for (let c = 0; c < numOfChan; c++) {
+                    const sample = Math.max(-1, Math.min(1, channels[c][i]));
+                    const sampleInt = sample < 0 ? sample * 0x8000 : sample * 0x7FFF;
+                    view.setInt16(44 + pos, sampleInt, true);
+                    pos += 2;
+                }
+            }
+            
+            return new Blob([view], { type: 'audio/wav' });
+        }
+        
+        // Helper function for data view
+        function setUint16(view, offset, value) {
+            view.setUint16(offset, value, true);
+        }
+        
+        function setUint32(view, offset, value) {
+            view.setUint32(offset, value, true);
+        }
+    </script>
+</body>
+</html> 

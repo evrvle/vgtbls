@@ -1,0 +1,78 @@
+{
+  "name": "VGTBLS Podcast - Electronic Music & DJ Sets",
+  "short_name": "VGTBLS Podcast",
+  "description": "Discover fresh electronic music, DJ mixes, and underground sounds with our unique vegetable-themed podcast fleur",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#ffffff",
+  "theme_color": "#87CEEB",
+  "icons": [
+    {
+      "src": "images/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "images/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "images/maskable-icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Latest DJ Mix",
+      "short_name": "Latest Mix",
+      "description": "Listen to our latest electronic music DJ mix",
+      "url": "/mixes/latest"
+    },
+    {
+      "name": "Techno Collection",
+      "short_name": "Techno",
+      "description": "Explore our curated techno music collection",
+      "url": "/techno-mixes"
+    },
+    {
+      "name": "House Music",
+      "short_name": "House",
+      "description": "Discover our house music DJ sets",
+      "url": "/house-music"
+    },
+    {
+      "name": "Ambient Sounds",
+      "short_name": "Ambient",
+      "description": "Relax with our ambient sound collection",
+      "url": "/ambient-sounds"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "images/screenshot1.jpg",
+      "sizes": "1280x720",
+      "type": "image/jpeg",
+      "form_factor": "wide",
+      "label": "VGTBLS Podcast homescreen with our DJ mixes"
+    },
+    {
+      "src": "images/screenshot2.jpg",
+      "sizes": "1280x720",
+      "type": "image/jpeg",
+      "form_factor": "wide",
+      "label": "Night mode with our electronic music collection"
+    },
+    {
+      "src": "images/screenshot-mobile.jpg",
+      "sizes": "540x1200",
+      "type": "image/jpeg",
+      "form_factor": "narrow",
+      "label": "Mobile view of our music player interface"
+    }
+  ],
+  "prefer_related_applications": false
+} 

@@ -1,0 +1,18 @@
+User-agent: *
+Allow: /
+Sitemap: https://vgtbls.netlify.app/sitemap.xml
+Sitemap: https://vgtbls.netlify.app/audio-sitemap.xml
+
+# Prioritize music content indexing
+Allow: /mixes/
+Allow: /electronic-music/
+Allow: /dj-sets/
+Allow: /techno-mixes/
+Allow: /house-music/
+Allow: /ambient-sounds/
+Allow: /dj-playlists/
+
+# Allow audio file indexing
+Allow: /*.mp3$
+Allow: /*.wav$
+Allow: /*.ogg$ 

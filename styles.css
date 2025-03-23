@@ -248,6 +248,7 @@ header {
     text-align: center;
     margin-bottom: 2rem;
     padding-top: 1rem;
+    content-visibility: auto; /* Performance optimization */
 }
 
 h1 {
@@ -255,6 +256,7 @@ h1 {
     margin-bottom: 1rem;
     text-shadow: 2px 2px 0px #fff;
     animation: wobble 2s ease-in-out infinite;
+    will-change: transform; /* Performance optimization */
 }
 
 /* Night mode heading shadow */
@@ -283,6 +285,7 @@ body.night-mode header p {
     justify-content: center;
     align-items: center;
     padding: 2rem 0;
+    content-visibility: auto; /* Performance optimization */
 }
 
 .basket {
@@ -388,6 +391,7 @@ body.night-mode .veg-link {
     image-rendering: -webkit-optimize-contrast; /* Improves image clarity */
     -webkit-backface-visibility: hidden; /* Fixes rendering issues */
     backface-visibility: hidden;
+    will-change: transform, filter; /* Performance optimization for animations */
 }
 
 .veg-link:hover .veg-image {
@@ -413,6 +417,7 @@ body.night-mode .veg-link:hover .veg-image {
 .tomato .veg-image {
     transform-origin: center bottom;
     animation: gentle-bounce 6s ease-in-out infinite alternate;
+    will-change: transform; /* Performance optimization */
 }
 
 /* Night mode tomato */
@@ -424,6 +429,7 @@ body.night-mode .tomato .veg-image {
 .pepper .veg-image {
     transform: rotate(-10deg);
     transition: transform 0.3s ease;
+    will-change: transform; /* Performance optimization */
 }
 
 .pepper:hover .veg-image {
@@ -443,6 +449,7 @@ body.night-mode .pepper:hover .veg-image {
 .cucumber .veg-image {
     transform-origin: center;
     transition: transform 0.3s ease-out;
+    will-change: transform; /* Performance optimization */
 }
 
 .cucumber:hover .veg-image {
@@ -464,6 +471,7 @@ body.night-mode .cucumber:hover .veg-image {
     transform-origin: center top;
     animation: sway 4s ease-in-out infinite alternate;
     transition: transform 0.3s ease, filter 0.3s ease;
+    will-change: transform; /* Performance optimization */
 }
 
 .carrot:hover .veg-image {
@@ -484,6 +492,7 @@ body.night-mode .carrot:hover .veg-image {
 /* Broccoli */
 .broccoli .veg-image {
     transition: filter 0.3s ease, transform 0.3s ease;
+    will-change: transform, filter; /* Performance optimization */
 }
 
 .broccoli:hover .veg-image {
@@ -559,6 +568,7 @@ footer {
     font-size: 1.1rem;
     text-shadow: 1px 1px 0px #fff;
     transition: text-shadow 0.5s ease;
+    content-visibility: auto; /* Performance optimization */
 }
 
 /* Night mode footer */
@@ -575,81 +585,6 @@ body.night-mode .night-elements {
     display: block;
 }
 
-/* Owl with headphones */
-.owl {
-    position: fixed;
-    top: 120px;
-    left: 80px;
-    width: 100px;
-    z-index: 10;
-    filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.15));
-    animation: owl-float 15s ease-in-out infinite alternate;
-    cursor: pointer; /* Add cursor pointer to indicate clickability */
-}
-
-.owl-image {
-    width: 100%;
-    height: auto;
-    transform-origin: center;
-    transition: transform 0.3s ease;
-    animation: owl-blink 4s infinite;
-}
-
-.owl:hover .owl-image {
-    transform: scale(1.1) rotate(5deg);
-    filter: brightness(1.1);
-}
-
-/* Owl tap counter styles */
-.tap-counter {
-    position: fixed;
-    font-size: 32px;
-    font-weight: bold;
-    color: #fff;
-    text-shadow: 0 0 5px rgba(0,0,0,0.7), 0 0 10px rgba(255,255,255,0.5);
-    opacity: 0;
-    transition: opacity 0.8s ease;
-    transform: scale(0.5);
-    pointer-events: none;
-    font-family: 'Indie Flower', cursive;
-    z-index: 100;
-    background: transparent;
-    padding: 0;
-    border-radius: 0;
-    white-space: nowrap;
-}
-
-/* Animation for tap counter */
-@keyframes tap-counter-pop {
-    0% { transform: scale(0.5); opacity: 0; }
-    50% { transform: scale(1.2); opacity: 1; }
-    100% { transform: scale(1); opacity: 1; }
-}
-
-.tap-counter.show {
-    animation: tap-counter-pop 0.4s forwards;
-}
-
-/* Special animation for the rickroll moment */
-.owl.rickroll {
-    animation: rickroll-dance 0.8s infinite, owl-float 15s ease-in-out infinite alternate;
-}
-
-@keyframes rickroll-dance {
-    0%, 100% { transform: rotate(-5deg); }
-    50% { transform: rotate(5deg); }
-}
-
-@keyframes owl-float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-15px); }
-}
-
-@keyframes owl-blink {
-    0%, 90%, 100% { filter: brightness(1); }
-    95% { filter: brightness(1.2); }
-}
-
 /* Mosquito style */
 .mosquito {
     position: fixed;
@@ -659,6 +594,7 @@ body.night-mode .night-elements {
     border-radius: 50%;
     pointer-events: none;
     z-index: 10;
+    will-change: transform; /* Performance optimization */
 }
 
 .mosquito::before {
@@ -692,6 +628,7 @@ body.night-mode .night-elements {
     background: rgba(255, 255, 255, 0.3);
     border-radius: 50%;
     animation: wing-flutter 0.1s infinite alternate;
+    will-change: transform; /* Performance optimization */
 }
 
 .mosquito .wing.left {
@@ -721,6 +658,7 @@ body.night-mode .night-elements {
     border-radius: 50%;
     opacity: 0.8;
     animation: twinkle 2s infinite alternate;
+    contain: layout style paint; /* Performance optimization */
 }
 
 @keyframes twinkle {
@@ -728,7 +666,7 @@ body.night-mode .night-elements {
     to { opacity: 0.8; }
 }
 
-/* Responsive adjustments for owl */
+/* Responsive adjustments */
 @media (max-width: 768px) {
     .veg-links {
         gap: 1.5rem;
@@ -754,17 +692,6 @@ body.night-mode .night-elements {
     .controls {
         flex-direction: column;
         gap: 10px;
-    }
-    
-    .owl {
-        top: 160px;
-        left: 30px;
-        width: 80px;
-    }
-    
-    /* Responsive tap counter */
-    .tap-counter {
-        font-size: 26px;
     }
 }
 
@@ -793,16 +720,43 @@ body.night-mode .night-elements {
     .basket {
         padding: 1rem;
     }
-    
-    .owl {
-        top: 150px;
-        left: 20px;
-        width: 70px;
+}
+
+/* Print media query to optimize printing */
+@media print {
+    .night-elements, 
+    .controls,
+    .mode-toggle,
+    .tap-counter {
+        display: none !important;
     }
     
-    /* Responsive tap counter for smaller screens */
-    .tap-counter {
-        font-size: 22px;
+    body, body.day-mode, body.night-mode {
+        background: #fff !important;
+        color: #000 !important;
+    }
+    
+    body::before,
+    body::after,
+    body.day-mode::before,
+    body.day-mode::after,
+    body.night-mode::before,
+    body.night-mode::after {
+        display: none !important;
+    }
+    
+    h1, header p, footer, .veg-link span {
+        text-shadow: none !important;
+        color: #000 !important;
+    }
+    
+    .basket {
+        box-shadow: none !important;
+        border: 1px solid #ccc !important;
+    }
+    
+    .veg-image {
+        filter: none !important;
     }
 }
 
@@ -836,115 +790,6 @@ html[lang="ru"] .veg-link[aria-label*="Soon"]::after {
     font-size: 0.9rem;
 }
 
-/* DJ Pepe Animation */
-.dj-pepe {
-    position: fixed;
-    z-index: 20;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 1s ease;
-    filter: drop-shadow(0 0 10px rgba(0, 255, 0, 0.3));
-    animation: pepe-float 60s infinite alternate ease-in-out;
-    display: none;
-}
-
-body.night-mode .dj-pepe {
-    display: block;
-    opacity: 1;
-}
-
-.pepe-gif {
-    width: 120px;
-    height: auto;
-    transform-origin: center;
-    animation: pepe-rotation 15s infinite linear, pepe-pulse 3s infinite alternate;
-}
-
-@keyframes pepe-float {
-    0% {
-        top: 15%;
-        left: 15%;
-        transform: scale(0.8);
-    }
-    10% {
-        top: 70%;
-        left: 25%;
-        transform: scale(1.1);
-    }
-    20% {
-        top: 30%;
-        left: 80%;
-        transform: scale(0.7);
-    }
-    30% {
-        top: 60%;
-        left: 40%;
-        transform: scale(1.2);
-    }
-    40% {
-        top: 20%;
-        left: 60%;
-        transform: scale(0.9);
-    }
-    50% {
-        top: 80%;
-        left: 70%;
-        transform: scale(1);
-    }
-    60% {
-        top: 40%;
-        left: 10%;
-        transform: scale(1.1);
-    }
-    70% {
-        top: 70%;
-        left: 90%;
-        transform: scale(0.8);
-    }
-    80% {
-        top: 10%;
-        left: 50%;
-        transform: scale(1.2);
-    }
-    90% {
-        top: 50%;
-        left: 30%;
-        transform: scale(0.7);
-    }
-    100% {
-        top: 25%;
-        left: 75%;
-        transform: scale(1);
-    }
-}
-
-@keyframes pepe-rotation {
-    0% {
-        transform: rotate(0deg);
-    }
-    25% {
-        transform: rotate(10deg);
-    }
-    50% {
-        transform: rotate(0deg);
-    }
-    75% {
-        transform: rotate(-10deg);
-    }
-    100% {
-        transform: rotate(0deg);
-    }
-}
-
-@keyframes pepe-pulse {
-    0% {
-        filter: brightness(1);
-    }
-    100% {
-        filter: brightness(1.3);
-    }
-}
-
 /* Fix for all browsers to remove the box effect */
 a {
     -webkit-touch-callout: none; /* Prevents callout to copy image, etc when tap to hold */
@@ -953,4 +798,132 @@ a {
     -moz-user-select: none; /* Firefox */
     -ms-user-select: none; /* Internet Explorer/Edge */
     user-select: none; /* Non-prefixed version */
+}
+
+/* Load content efficiently with content-visibility */
+.basket-container {
+    content-visibility: auto;
+    contain-intrinsic-size: 400px;
+}
+
+.night-elements {
+    content-visibility: auto;
+    contain-intrinsic-size: 200px;
+}
+
+/* Pepe Animation Styles */
+/* Style for the link that contains pepe */
+a.pepe-link {
+    position: fixed;
+    display: block;
+    z-index: 10000;
+    text-decoration: none;
+    cursor: pointer;
+    will-change: left, top;
+}
+
+.dancing-pepe {
+    position: relative; /* Changed from fixed to relative */
+    width: 80px;
+    height: 80px;
+    background-image: url('pepe-pepedj.gif');
+    background-size: contain;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    filter: drop-shadow(0 0 3px rgba(0, 255, 0, 0.5)); /* Reduced shadow intensity */
+    will-change: transform, opacity;
+    pointer-events: auto; /* Changed from 'none' to make it clickable */
+    opacity: 0;
+    transition: transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1), filter 0.3s ease;
+}
+
+.dancing-pepe.active {
+    pointer-events: auto;
+    opacity: 0.85; /* Slightly reduced opacity for less visual obtrusiveness */
+    transition: opacity 1s ease-in;
+}
+
+.dancing-pepe:hover {
+    transform: scale(1.1) rotate(5deg); /* Reduced scale and rotation */
+    filter: drop-shadow(0 0 5px rgba(0, 255, 0, 0.7)); /* Subtle glow increase on hover */
+}
+
+.dancing-pepe.teasing {
+    animation: pepe-tease 2s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+@keyframes pepe-tease {
+    0% {
+        transform: scale(1) rotate(0deg);
+    }
+    20% {
+        transform: scale(1.15) rotate(-5deg); /* Reduced intensity */
+    }
+    40% {
+        transform: scale(1.05) rotate(8deg); /* Reduced intensity */
+    }
+    60% {
+        transform: scale(1.2) rotate(-3deg); /* Reduced intensity */
+    }
+    80% {
+        transform: scale(1.1) rotate(5deg); /* Reduced intensity */
+    }
+    100% {
+        transform: scale(1) rotate(0deg);
+    }
+}
+
+@media (max-width: 768px) {
+    .veg-links {
+        gap: 1.5rem;
+    }
+    
+    .veg-image {
+        width: 80px;
+        height: 80px; /* Override individual vegetable heights */
+    }
+    
+    .carrot .veg-image {
+        height: 100px !important; /* Special case for carrot */
+    }
+    
+    h1 {
+        font-size: 2.5rem;
+    }
+    
+    header p {
+        font-size: 1.2rem;
+    }
+    
+    .controls {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .veg-links {
+        gap: 1rem;
+    }
+    
+    .veg-image {
+        width: 60px;
+        height: 60px !important; /* Override individual vegetable heights */
+    }
+    
+    .carrot .veg-image {
+        height: 80px !important; /* Special case for carrot */
+    }
+    
+    h1 {
+        font-size: 2rem;
+    }
+    
+    header p {
+        font-size: 1rem;
+    }
+    
+    .basket {
+        padding: 1rem;
+    }
 } 

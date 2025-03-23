@@ -1,0 +1,16 @@
+This is a text placeholder for a sample MP3 file.
+In a real implementation, this would be an actual MP3 audio file containing a DJ mix.
+This placeholder is created for SEO demonstration purposes.
+
+For a real implementation:
+1. Replace this with an actual MP3 audio file
+2. Remove the .txt extension from the filename
+3. Ensure the audio is properly tagged with ID3 metadata
+4. Consider adding additional information like tracklist, mixing credits, etc.
+
+Sample information for SEO:
+Title: VGTBLS Mix - Electronic Garden Sessions Vol. 1
+Artist: VGTBLS DJ Collective
+Date: December 2023
+Genre: Electronic / House / Techno
+Duration: 1:15:23 

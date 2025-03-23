@@ -3,8 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VGTBLS Podcast</title>
-    <!-- Emoji Favicon - Musical Note (🎵) -->
+    <title>VGTBLS Podcast - Electronic Music, DJ Sets & Mixes | Unique Music Experience</title>
+    <meta name="description" content="VGTBLS Podcast offers fresh electronic music, DJ mixes, and unique audio content with a playful interface. Discover our curated music selections on Telegram, SoundCloud, YouTube, and Spotify.">
+    <meta name="keywords" content="podcast, music, DJ sets, electronic music, mixes, VGTBLS, music podcast, DJ mixes, beats, underground music, techno, house music, ambient sounds">
+    <meta name="theme-color" content="#87CEEB">
+    
+    <!-- Debugging script for night mode -->
+    <script>
+        console.log('Starting page load');
+        // Check initial localStorage state
+        console.log('Initial localStorage:', {
+            'mode': localStorage.getItem('mode'),
+            'preferred-mode': localStorage.getItem('preferred-mode'),
+            'language': localStorage.getItem('language')
+        });
+        
+        // Load the night mode from localStorage if it exists
+        const savedMode = localStorage.getItem('mode') || localStorage.getItem('preferred-mode');
+        if (savedMode === 'night') {
+            document.addEventListener('DOMContentLoaded', function() {
+                console.log('Setting night mode class early');
+                document.body.className = 'night-mode';
+            });
+        }
+    </script>
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="styles.css" as="style">
+    <link rel="preload" href="script.js" as="script">
+    <link rel="preload" href="images/tomato.png" as="image" fetchpriority="high">
+    <link rel="preload" href="images/pepper.png" as="image" fetchpriority="high">
+    
+    <!-- Favicon -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎵</text></svg>">
     
     <!-- Alternative Emoji Favicons (uncomment to use) -->
@@ -23,6 +53,54 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Neucha&display=swap" rel="stylesheet">
+    
+    <!-- Schema.org structured data for Music -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "MusicGroup",
+      "name": "VGTBLS Podcast",
+      "description": "Electronic music, DJ sets, and unique audio content with a playful vegetable-themed interface",
+      "url": "https://vgtbls.netlify.app",
+      "logo": "https://vgtbls.netlify.app/images/icon-192x192.png",
+      "genre": ["Electronic", "House", "Techno", "Ambient", "DJ Mixes"],
+      "sameAs": [
+        "https://t.me/vgtblspodcast",
+        "https://soundcloud.com/vgtblspodcast"
+      ]
+    }
+    </script>
+    
+    <!-- Open Graph / Social Media Meta Tags -->
+    <meta property="og:title" content="VGTBLS Podcast - Electronic Music & DJ Sets">
+    <meta property="og:description" content="Discover fresh electronic music, DJ mixes and underground sounds with our unique vegetable-themed podcast interface.">
+    <meta property="og:image" content="https://vgtbls.netlify.app/images/og-image.jpg">
+    <meta property="og:url" content="https://vgtbls.netlify.app">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="VGTBLS Podcast">
+    <meta property="og:audio" content="https://vgtbls.netlify.app/sample-mix.mp3">
+    
+    <!-- Twitter Card data -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="VGTBLS Podcast - Electronic Music & DJ Sets">
+    <meta name="twitter:description" content="Discover fresh electronic music, DJ mixes and underground sounds with our unique vegetable-themed podcast interface.">
+    <meta name="twitter:image" content="https://vgtbls.netlify.app/images/og-image.jpg">
+    <meta name="twitter:site" content="@vgtblspodcast">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://vgtbls.netlify.app/">
+    
+    <!-- Alternate language versions -->
+    <link rel="alternate" hreflang="en" href="https://vgtbls.netlify.app/">
+    <link rel="alternate" hreflang="es" href="https://vgtbls.netlify.app/?lang=es">
+    <link rel="alternate" hreflang="ru" href="https://vgtbls.netlify.app/?lang=ru">
+    <link rel="alternate" hreflang="x-default" href="https://vgtbls.netlify.app/">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json">
+    
+    <!-- Apple Touch Icon -->
+    <link rel="apple-touch-icon" href="images/icon-192x192.png">
 </head>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-EZLJ4YWYRC"></script>
 <script>
@@ -56,9 +134,9 @@
             <h1 class="lang-es">Bienvenido a nuestro VGTBLS Podcast</h1>
             <h1 class="lang-ru">VGTBLS Podcast. Музыка вкусная и полезная.</h1>
             
-            <p class="lang-en">Click on the vegetables to reach out to us!</p>
-            <p class="lang-es">¡Haz clic en las verduras para conectarte con nosotros!</p>
-            <p class="lang-ru">Тыкай по овощам, чтобы найти нас!</p>
+            <p class="lang-en">Click on the vegetables to discover our electronic music & DJ sets!</p>
+            <p class="lang-es">¡Haz clic en las verduras para descubrir nuestra música electrónica y DJ sets!</p>
+            <p class="lang-ru">Тыкай по овощам, чтобы найти нашу электронную музыку и DJ сеты!</p>
         </header>
         
         <div class="basket-container">
@@ -114,14 +192,14 @@
             <img src="images/owl.png" alt="Owl with headphones" class="owl-image" loading="lazy">
         </div>
         
-        <!-- DJ Pepe floating around in night mode -->
-        <div class="dj-pepe">
-            <img src="pepe-pepedj.gif" alt="DJ Pepe" class="pepe-gif">
-        </div>
-        
         <!-- Mosquitos will be added via JavaScript -->
     </div>
     
+    <!-- Audio files for owl tap counter -->
+    <script src="sounds/tap-sound.js"></script>
+    <script src="sounds/rick-intro.js"></script>
+    
+    <!-- Main script -->
     <script src="script.js"></script>
 </body>
 </html> 
