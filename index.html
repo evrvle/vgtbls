@@ -27,43 +27,12 @@
             });
         }
     </script>
-    <script async src="https://telegram.org/js/telegram-widget.js?22" data-telegram-login="not_next_dimension_bot" data-size="small" data-userpic="false" data-onauth="onTelegramAuth(user)" data-request-access="write"></script>
-    <script type="text/javascript">
-      function onTelegramAuth(user) {
-        // Store user data in localStorage
-        localStorage.setItem('telegramUser', JSON.stringify(user));
-        
-        // Update UI to show logged in state
-        const loginContainer = document.getElementById('telegram-login-container');
-        if (loginContainer) {
-          loginContainer.innerHTML = `
-            <div class="user-info">
-              <span>Welcome, ${user.first_name}!</span>
-              <button onclick="handleLogout()" class="logout-btn">Logout</button>
-            </div>
-          `;
-        }
-        
-        // You can add additional logic here, like redirecting to a protected area
-        // or making API calls to your backend
-      }
-
-      function handleLogout() {
-        // Clear stored user data
-        localStorage.removeItem('telegramUser');
-        
-        // Reload the page to show login button again
-        window.location.reload();
-      }
-
-      // Check if user is already logged in on page load
-      document.addEventListener('DOMContentLoaded', function() {
-        const storedUser = localStorage.getItem('telegramUser');
-        if (storedUser) {
-          onTelegramAuth(JSON.parse(storedUser));
-        }
-      });
-    </script>
+   <script async src="https://telegram.org/js/telegram-widget.js?22" data-telegram-login="not_next_dimension_bot" data-size="small" data-userpic="false" data-onauth="onTelegramAuth(user)" data-request-access="write"></script>
+   <script type="text/javascript">
+     function onTelegramAuth(user) {
+       alert('Logged in as ' + user.first_name + ' ' + user.last_name + ' (' + user.id + (user.username ? ', @' + user.username : '') + ')');
+     }
+   </script>
     
     <!-- Preload critical resources -->
     <link rel="preload" href="styles.css" as="style">
