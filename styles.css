@@ -926,4 +926,72 @@ a.pepe-link {
     .basket {
         padding: 1rem;
     }
+}
+
+/* Telegram Login Styles */
+.telegram-login-container {
+    margin-left: 15px;
+    display: flex;
+    align-items: center;
+    min-width: 200px; /* Ensure container has enough width */
+}
+
+#telegram-login-button {
+    display: inline-block;
+    min-height: 32px; /* Match the height of the language buttons */
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 5px 10px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    font-size: 14px;
+    min-width: 200px; /* Match container width */
+}
+
+.logout-btn {
+    background: none;
+    border: 1px solid currentColor;
+    padding: 2px 8px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: all 0.3s ease;
+}
+
+.logout-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Night mode adjustments */
+.night-mode .user-info {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.night-mode .logout-btn {
+    color: #fff;
+}
+
+/* Responsive adjustments for Telegram login */
+@media (max-width: 768px) {
+    .controls {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .telegram-login-container {
+        margin-left: 0;
+        margin-top: 10px;
+        width: 100%;
+        justify-content: center;
+    }
+    
+    #telegram-login-button {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
 } 
